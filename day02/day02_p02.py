@@ -1,0 +1,24 @@
+def is_safe(report):
+    increasing = all(1 <= report[i+1] - report[i] <= 3 for i in range(len(report) - 1))
+    decreasing = all(1 <= report[i] - report[i+1] <= 3 for i in range(len(report) - 1))
+    return increasing or decreasing
+
+def is_safe_with_dampener(report):
+    if is_safe(report):
+        return True
+    for i in range(len(report)):
+        modified_report = report[:i] + report[i+1:]
+        if is_safe(modified_report):
+            return True
+    return False
+
+with open("day_02.in") as fin:
+    data = fin.read()
+
+ans = 0
+for line in data.strip().split("\n"):
+    levels = [int(i) for i in line.split()]
+    if is_safe_with_dampener(levels):
+        ans += 1
+
+print(ans)
